@@ -35,7 +35,14 @@ node api.js &
 # Vòng lặp cập nhật thông tin hệ thống mỗi giây
 while true; do
     # Lấy thông tin RAM (GB) - FIX CÚ PHÁP AWK
-    read total used free < <(free -m | awk '/Mem:/ {printf "%.2f %.2f %.2f", $2/1024, $3/1024, $4/1024}')
+    read -r total used free <<< "$(free -m | awk '/Mem:/ {print $2, $3, $4}')"
+    
+    # Kiểm tra giá trị hợp lệ
+    if [[ -z "$total" || -z "$used" || -z "$free" ]]; then
+        echo "❌ Lỗi lấy thông tin RAM!"
+        sleep 1
+        continue
+    fi
     
     used_percent=$(awk "BEGIN {printf \"%.2f\", ($used/$total) * 100}")
     free_percent=$(awk "BEGIN {printf \"%.2f\", ($free/$total) * 100}")
@@ -48,8 +55,8 @@ while true; do
     cpu_usage=$(awk "BEGIN {printf \"%.2f\", 100 - $cpu_idle}")
     cpu_free=$(awk "BEGIN {printf \"%.2f\", $cpu_idle}")
 
-    echo "📌 RAM đã sử dụng: ${used_percent}% (${used} GB)"
-    echo "📌 RAM còn trống: ${free_percent}% (${free} GB)"
+    echo "📌 RAM đã sử dụng: ${used_percent}% (${used} MB)"
+    echo "📌 RAM còn trống: ${free_percent}% (${free} MB)"
     echo "📌 CPU đang sử dụng: ${cpu_usage}%"
     echo "📌 CPU còn trống: ${cpu_free}%"
 
