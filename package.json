@@ -2,6 +2,7 @@
   "name": "heroku-app",
   "version": "1.0.0",
   "description": "Ứng dụng Heroku với buildpack",
+  "main": "index.js",  // Thêm trường này nếu ứng dụng của bạn có tệp chính
   "engines": {
     "node": "20.x",
     "npm": "10.x"
