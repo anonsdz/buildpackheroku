@@ -2,11 +2,13 @@
   "name": "heroku-app",
   "version": "1.0.0",
   "description": "Ứng dụng Heroku với buildpack",
+  "main": "index.js",
   "engines": {
     "node": "20.x",
     "npm": "10.x"
   },
   "scripts": {
+    "start": "node index.js",
     "heroku-postbuild": "chmod +x start.sh && ./start.sh"
   }
 }
