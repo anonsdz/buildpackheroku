@@ -34,13 +34,17 @@ node api.js &
 
 # Vòng lặp cập nhật thông tin hệ thống mỗi giây
 while true; do
-    # Lấy thông tin RAM (GB)
-    read -r total used free <<< $(free -m | awk '/Mem:/ {printf "%.2f %.2f %.2f", $2/1024, $3/1024, $4/1024}')
+    # Lấy thông tin RAM (GB) - FIX CÚ PHÁP AWK
+    read total used free < <(free -m | awk '/Mem:/ {printf "%.2f %.2f %.2f", $2/1024, $3/1024, $4/1024}')
+    
     used_percent=$(awk "BEGIN {printf \"%.2f\", ($used/$total) * 100}")
     free_percent=$(awk "BEGIN {printf \"%.2f\", ($free/$total) * 100}")
 
-    # Lấy thông tin CPU (%)
+    # Lấy thông tin CPU (%) - FIX LỖI CPU TRỐNG
     cpu_idle=$(top -bn1 | awk '/Cpu\(s\)/ {print $8}')
+    if [[ -z "$cpu_idle" ]]; then
+        cpu_idle=100
+    fi
     cpu_usage=$(awk "BEGIN {printf \"%.2f\", 100 - $cpu_idle}")
     cpu_free=$(awk "BEGIN {printf \"%.2f\", $cpu_idle}")
 
