@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "node-addon-api": "^4.2.0",
-    "cloudflared": "^2024.2.0",
     "code-server": "^4.90.1"
   }
 }
