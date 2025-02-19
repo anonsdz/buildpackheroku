@@ -4,14 +4,15 @@
   "description": "Ứng dụng Heroku với cloudflared và code-server",
   "main": "start.js",
   "scripts": {
-    "start": "node start.js",
-    "postinstall": "npm install -g node-addon-api && npm install -g cloudflared code-server"
+    "start": "node start.js"
   },
   "engines": {
     "node": "20.x",
     "npm": "10.x"
   },
   "dependencies": {
-    "node-addon-api": "^4.2.0"
+    "node-addon-api": "^4.2.0",
+    "cloudflared": "^2024.2.0",
+    "code-server": "^4.90.1"
   }
 }
