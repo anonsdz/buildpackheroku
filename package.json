@@ -1,10 +1,13 @@
 {
   "name": "heroku-app",
   "version": "1.0.0",
+  "engines": {
+    "node": "22.x"
+  },
   "main": "start.js",
   "scripts": {
     "start": "node start.js",
-    "postinstall": "npm install -g cloudflared && curl -fsSL https://code-server.dev/install.sh | sh"
+    "postinstall": "npm install -g cloudflared code-server"
   },
   "dependencies": {
     "axios": "^1.5.0"
