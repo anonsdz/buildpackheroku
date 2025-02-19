@@ -25,7 +25,7 @@ echo "📌 Node.js Version: $(node -v)"
 echo "📌 NPM Version: $(npm -v)"
 echo "📌 CPU Cores: $(nproc)"
 
-# Lấy tổng RAM chính xác
+# Lấy tổng RAM (GB)
 total_ram=$(awk '/MemTotal/ {printf "%.2f", $2 / 1024 / 1024}' /proc/meminfo)
 echo "📌 Tổng RAM: ${total_ram} GB"
 
@@ -34,21 +34,23 @@ node api.js &
 
 # Vòng lặp cập nhật thông tin hệ thống mỗi giây
 while true; do
-    # Lấy thông tin RAM
-    read -r total used free <<<$(free -m | awk '/Mem:/ {printf "%.2f %.2f %.2f", $2/1024, $3/1024, $4/1024}')
-    
-    # Lấy thông tin CPU chính xác hơn
-    cpu_idle=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}')
-    cpu_usage=$(echo "100 - $cpu_idle" | bc)
+    # Lấy thông tin RAM (GB)
+    read -r total used free <<< $(free -m | awk '/Mem:/ {printf "%.2f %.2f %.2f", $2/1024, $3/1024, $4/1024}')
+    used_percent=$(awk "BEGIN {printf \"%.2f\", ($used/$total) * 100}")
+    free_percent=$(awk "BEGIN {printf \"%.2f\", ($free/$total) * 100}")
 
-    # Hiển thị thông tin
-    echo "📌 RAM đã sử dụng: $(echo "scale=2; $used / $total * 100" | bc)% ($used GB)"
-    echo "📌 RAM còn trống: $(echo "scale=2; $free / $total * 100" | bc)% ($free GB)"
-    echo "📌 CPU đang sử dụng: $cpu_usage%"
-    echo "📌 CPU còn trống: $(echo "scale=2; 100 - $cpu_usage" | bc)%"
+    # Lấy thông tin CPU (%)
+    cpu_idle=$(top -bn1 | awk '/Cpu\(s\)/ {print $8}')
+    cpu_usage=$(awk "BEGIN {printf \"%.2f\", 100 - $cpu_idle}")
+    cpu_free=$(awk "BEGIN {printf \"%.2f\", $cpu_idle}")
+
+    echo "📌 RAM đã sử dụng: ${used_percent}% (${used} GB)"
+    echo "📌 RAM còn trống: ${free_percent}% (${free} GB)"
+    echo "📌 CPU đang sử dụng: ${cpu_usage}%"
+    echo "📌 CPU còn trống: ${cpu_free}%"
 
     sleep 1
 done &
 
 # Giữ tiến trình chạy mãi mãi
-wait
+tail -f /dev/null
