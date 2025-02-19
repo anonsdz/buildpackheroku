@@ -27,14 +27,14 @@ while true; do
     used_percent=$(awk "BEGIN {printf \"%.2f\", ($used/$total) * 100}")
     free_percent=$(awk "BEGIN {printf \"%.2f\", ($free/$total) * 100}")
 
-    cpu_idle=$(top -bn1 | awk '/Cpu\(s\)/ {print $8}' | tr -d ',')
-    cpu_idle=${cpu_idle:-100.0}  # Nếu lỗi, mặc định là 100%
-    cpu_usage=$(awk "BEGIN {printf \"%.2f\", 100 - $cpu_idle}")
+    # Lấy giá trị CPU đang sử dụng
+    cpu_usage=$(top -bn1 | awk -F',' '/Cpu\(s\)/ {print 100 - $4}' | awk '{printf "%.2f", $1}')
+    cpu_free=$(awk "BEGIN {printf \"%.2f\", 100 - $cpu_usage}")
 
     echo "📌 RAM đã sử dụng: ${used_percent}% (${used} GB)"
     echo "📌 RAM còn trống: ${free_percent}% (${free} GB)"
     echo "📌 CPU đang sử dụng: ${cpu_usage}%"
-    echo "📌 CPU còn trống: ${cpu_idle}%"
+    echo "📌 CPU còn trống: ${cpu_free}%"
 
     sleep 1
 done &
