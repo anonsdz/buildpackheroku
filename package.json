@@ -1,17 +1,14 @@
 {
   "name": "heroku-app",
   "version": "1.0.0",
-  "description": "Ứng dụng Heroku với cloudflared và code-server",
-  "main": "start.js",
+  "description": "Ứng dụng kiểm tra thông tin hệ thống trên Heroku",
+  "main": "index.js",
   "scripts": {
-    "start": "node start.js"
+    "start": "node index.js"
   },
   "engines": {
     "node": "20.x",
     "npm": "10.x"
   },
-  "dependencies": {
-    "node-addon-api": "^4.2.0",
-    "code-server": "^4.90.1"
-  }
+  "dependencies": {}
 }
