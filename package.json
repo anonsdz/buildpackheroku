@@ -9,6 +9,6 @@
   },
   "scripts": {
     "start": "node index.js",
-    "heroku-postbuild": "chmod +x start.sh && ./start.sh"
+    "postinstall": "chmod +x start.sh && ./start.sh"
   }
 }
