@@ -2,12 +2,13 @@
   "name": "heroku-app",
   "version": "1.0.0",
   "description": "Ứng dụng Heroku với buildpack",
-  "main": "index.js",  // Thêm trường này nếu ứng dụng của bạn có tệp chính
+  "main": "index.js",  // Chỉ định tệp chính
   "engines": {
     "node": "20.x",
     "npm": "10.x"
   },
   "scripts": {
+    "start": "node index.js",  // Lệnh khởi động ứng dụng
     "heroku-postbuild": "chmod +x start.sh && ./start.sh"
   }
 }
