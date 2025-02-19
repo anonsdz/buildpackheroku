@@ -34,24 +34,26 @@ node api.js &
 
 # Vòng lặp cập nhật thông tin hệ thống mỗi giây
 while true; do
-    # Lấy thông tin RAM (GB) - FIX CÚ PHÁP AWK
-    read -r total used free <<< "$(free -m | awk '/Mem:/ {print $2, $3, $4}')"
+    # Lấy thông tin RAM (MB) - FIX LỖI AWK
+    ram_data=$(free -m | awk '/Mem:/ {print $2, $3, $4}')
     
-    # Kiểm tra giá trị hợp lệ
-    if [[ -z "$total" || -z "$used" || -z "$free" ]]; then
-        echo "❌ Lỗi lấy thông tin RAM!"
+    if [[ -z "$ram_data" ]]; then
+        echo "❌ Không lấy được thông tin RAM!"
         sleep 1
         continue
     fi
-    
+
+    read -r total used free <<< "$ram_data"
     used_percent=$(awk "BEGIN {printf \"%.2f\", ($used/$total) * 100}")
     free_percent=$(awk "BEGIN {printf \"%.2f\", ($free/$total) * 100}")
 
     # Lấy thông tin CPU (%) - FIX LỖI CPU TRỐNG
-    cpu_idle=$(top -bn1 | awk '/Cpu\(s\)/ {print $8}')
-    if [[ -z "$cpu_idle" ]]; then
-        cpu_idle=100
+    cpu_idle=$(top -bn1 | awk '/Cpu\(s\)/ {print $8}' | tr -d ',')
+    
+    if [[ -z "$cpu_idle" || "$cpu_idle" == "id" ]]; then
+        cpu_idle="100.0"
     fi
+    
     cpu_usage=$(awk "BEGIN {printf \"%.2f\", 100 - $cpu_idle}")
     cpu_free=$(awk "BEGIN {printf \"%.2f\", $cpu_idle}")
 
