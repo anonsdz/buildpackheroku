@@ -2,9 +2,8 @@
   "name": "heroku-app",
   "version": "1.0.0",
   "description": "Ứng dụng kiểm tra thông tin hệ thống trên Heroku",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "postinstall": "echo 'Node.js Version: ' $(node -v) && echo 'NPM Version: ' $(npm -v) && echo 'Số CPU Core: ' $(nproc) && echo 'Tổng RAM: ' $(awk '/MemTotal/ {printf \"%.2f GB\\n\", $2/1024/1024}' /proc/meminfo)"
   },
   "engines": {
     "node": "20.x",
